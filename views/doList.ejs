@@ -1,0 +1,46 @@
+<%- include('./partials/search') %>
+
+<h2><%= title %></h2>
+<div class="form-row">   
+   <table>
+     <tr>
+       <th>No</th>
+       <th>Do Number</th>
+       <th>Drawing No</th>
+       <th>FAB Number</th>
+       <th>Customer</th>
+       <th>Date</th> 
+       <th>Order Qty</th> 
+       <th>Deliver Qty</th> 
+                       
+     </tr>
+      <% let i=1 %>
+      <% let name ="" %>      
+      <% dos.forEach(d => { %> 
+        <% cu.forEach(c => { %>  
+         <% if( c.id == d.customer) { %>
+          <% name = c.name %>              
+         <% } %>
+        <% }) %> 
+        <tr>
+          <td><a class="btn-primary " href="/dos/<%= d.id %>"><%= i %></a></td>
+          <td><%= d.doNo %> </td>
+          <td><%= d.drawingNo %> </td>
+          <td><%= d.soNumber %> </td>
+          <td><%= name %></td>
+          <td><%= d.date.toISOString().split('T')[0] %></td>
+          <td><%= d.orderQty %> </td>
+          <td><%= d.deliverQty %> </td>
+          
+          
+        </tr>         
+      
+        
+
+
+
+        
+        <% i= i+1 %>            
+      <% }) %> 
+    </table>
+  </div>

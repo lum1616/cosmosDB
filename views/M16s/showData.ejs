@@ -1,0 +1,102 @@
+
+
+<h2 class="page-header">M16 Data Details from <%= strDate %> to  <%= endDate %></h2>
+
+
+
+<form action="/M16s/<%= dts[0].date %>?_method=PUT" method="POST">
+
+  <% let rcpList = [] %>
+  <% let siloList = [] %>
+  <% let siloNameList = [] %>
+  <% let batchList = [] %>
+  
+
+  <% dts.forEach(d => { %>
+    <% let position = rcpList.indexOf(d.rcpName.trim())  %>
+    <% if (position < 0) {%>
+      <% rcpList.push(d.rcpName.trim()) %>
+    <% } %>
+
+    <% position = siloList.indexOf(d.siloNo)  %>
+    <% if (position < 0) {%>
+      <% siloList.push(d.siloNo) %>
+      <% siloNameList.push(d.matName.trim()) %>
+    <% } %>
+
+    <% position = batchList.indexOf(d.batchNo)  %>
+    <% if (position < 0) {%>
+      <% batchList.push(d.batchNo) %>    
+    <% } %> 
+
+  <% }) %>
+ 
+  <% const totTargWt = [[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0]] %>
+  <% const totActWt = [[0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0]] %>
+  <% const totDiffWt = [[0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0]] %>
+
+  <% let i=1 %>
+
+ 
+
+    <% dts.forEach(d => { %>
+        <% siloList.forEach( s => { %>
+          <% if (s == d.siloNo) {%>
+            
+            <% let no = Number(d.siloNo) - 1 %>
+
+            <% totTargWt[i-1][no] += Number(d.targWt) %>
+            <% totActWt[i-1][no] += Number(d.actWt) %>
+            <% totDiffWt[i-1][no] += Number(d.diffWt) %>
+
+          <% } %>
+
+        <% }) %>
+    <% }) %>
+
+<div class="form-row">
+  <table>
+    <tr>
+      <th>Silo No</th>
+      <th>Material Name</th>
+      <th>Total Target </th>
+      <th>Total Actual</th>
+      <th>Total Diff.</th>
+      <th>Diff. %</th>
+      
+    </tr>
+        <% let j = 0 %>
+        <% let k = 0 %>
+        <% siloList.forEach(s => { %>
+
+          <% let no = [Number(siloList[k]-1)] %>
+          
+          <% if (totTargWt[j][no] != "0") {%>
+              <tr>
+                <td><%= siloList[k] %> </td>
+                <td><%= siloNameList[k] %> </td>
+                <td><%= totTargWt[j][no] %> </td>
+                <td><%= totActWt[j][no] %> </td>
+                <td><%= totDiffWt[j][no] %> </td>
+                <td><%= ((totDiffWt[j][no] / totTargWt[j][no]) * 100).toFixed(2) %> </td>
+                
+              </tr>
+          <% } %>
+
+          <% k++ %>
+          
+
+        <% }) %> 
+     
+
+   </table>
+ </div>
+
+
+
+  <div class="form-row form-row-end btn-row">
+    <a class="btn btn-primary"  href="/M16s/<%= dts[0].date %>/excelTot">EXCEL</a>
+  </div>
+
+</form>
+

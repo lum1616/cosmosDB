@@ -1,0 +1,14 @@
+.customer-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.8rem;
+  border-width: 0.5px; 
+  border-color: rgb(34, 39, 107);
+  border-style: solid;
+}
+
+.customer-name {
+  font-size: 1.5rem;
+  margin-inline-end: auto ;
+  text-align: left;
+}
