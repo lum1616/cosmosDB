@@ -38,9 +38,7 @@
       <% datas.forEach(d => { %>
         <tr>
           <% let iTm = parseInt(d.date.substring(11,13)) %> 
-          <% if (iTm < 15) { %>
-            <% iTm = iTm + 8 %>
-          <% } %>
+      
           <%  let sTm = iTm.toString() + d.date.substring(13,19)%>  
 
 

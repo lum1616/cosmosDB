@@ -45,9 +45,9 @@ function genTotExcel(res, dts, str, end) {
    }) 
    
 
-   const totTargWt = [[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0]] 
-   const totActWt = [[0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0]] 
-   const totDiffWt = [[0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0]] 
+   const totTargWt = [[0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0]] 
+   const totActWt = [[0,0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0]] 
+   const totDiffWt = [[0,0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0]] 
 
    let i=1 
 
@@ -140,11 +140,7 @@ function genDetailExcel(res, dts, str, end) {
     ws.getCell('B' +  strCnt).value = d.date.substring(0,10)
 
     iTm = parseInt(d.date.substring(11,13))  
-    if (iTm < 15 ){
-      iTm = iTm + 8 
 
-    }
-   
     
     let sTm = iTm.toString() + d.date.substring(13,19)  
 
@@ -178,21 +174,19 @@ function genDetailExcel(res, dts, str, end) {
 
 // All M16s Route
 router.get('/', async (req, res) => {
-  //let query = M16.find().limit(1).sort({$natural:-1})
-  //const data = await query.exec() 
+ 
   strDate= new Date().toJSON().slice(0, 10)
   endDate = new Date(strDate).toISOString().substring(0,10)
-  let tomorrow = new Date(endDate)
-  tomorrow.setDate(tomorrow.getDate() + 1)
-  //console.log(tomorrow);
  
   try {
    query = M16.find( {
     'date': {
-      $gte: new Date(strDate).toISOString(),
-      $lt: new Date(tomorrow).toISOString()
+      $gte: new Date(strDate + "T00:00:00.000+08:00").toISOString(),
+      $lt: new Date(endDate + "T24:00:00.000+08:00").toISOString()
     }
  } )
+
+
     const datas = await query.exec() 
     res.render('M16s/index', {
       datas: datas,
@@ -216,11 +210,11 @@ router.post('/', async (req, res) => {
   tomorrow.setDate(tomorrow.getDate() + 1)
   
   try {
-    //let query = M16.find( { date: day }) 
+ 
     let query = M16.find( {
       'date': {
-          $gte: new Date(strDate).toISOString(),
-          $lt: new Date(tomorrow).toISOString()
+        $gte: new Date(strDate ).toISOString( "en-US", {timeZone: "Asia/Kuala_Lumpur"}),
+        $lt: new Date(tomorrow).toISOString( "en-US", {timeZone: "Asia/Kuala_Lumpur"}),
       }
    } )
     const datas = await query.exec() 
@@ -246,8 +240,8 @@ router.get('/:date', async (req, res) => {
 
   let query = M16.find( {
     'date': {
-        $gte: new Date(strDate).toISOString(),
-        $lt: new Date(tomorrow).toISOString()
+      $gte: new Date(strDate ).toISOString( "en-US", {timeZone: "Asia/Kuala_Lumpur"}),
+      $lt: new Date(tomorrow).toISOString( "en-US", {timeZone: "Asia/Kuala_Lumpur"}),
     }
  } )
     
@@ -279,8 +273,8 @@ router.get('/:date/exceltot', async (req, res) => {
   tomorrow.setDate(tomorrow.getDate() + 1) 
   let query = M16.find( {
     'date': {
-        $gte: new Date(strDate).toISOString(),
-        $lt: new Date(tomorrow).toISOString()
+       $gte: new Date(strDate ).toISOString( "en-US", {timeZone: "Asia/Kuala_Lumpur"}),
+    $lt: new Date(tomorrow).toISOString( "en-US", {timeZone: "Asia/Kuala_Lumpur"}),
     }
  } )
 
@@ -305,8 +299,9 @@ router.get('/:date/excelDetail', async (req, res) => {
  
   let query = M16.find( {
     'date': {
-      $gte: new Date(strDate).toISOString(),
-      $lt: new Date(tomorrow).toISOString()  }
+      $gte: new Date(strDate ).toISOString( "en-US", {timeZone: "Asia/Kuala_Lumpur"}),
+        $lt: new Date(tomorrow).toISOString( "en-US", {timeZone: "Asia/Kuala_Lumpur"}),
+    }
 
  } )
 
