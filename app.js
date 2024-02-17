@@ -9,6 +9,8 @@ if (process.env.NODE_ENV !== 'production') {
   const methodOverride = require('method-override')  
   const indexRouter = require('./routes/index')
   const M16Router = require('./routes/M16s')  
+  const N530Router = require('./routes/N530')  
+  
   
   app.set('view engine', 'ejs')
   app.set('views', __dirname + '/views')
@@ -26,5 +28,7 @@ if (process.env.NODE_ENV !== 'production') {
   
   app.use('/', indexRouter) 
   app.use('/M16s', M16Router)
+  app.use('/N530', N530Router)
+  
   
   app.listen(process.env.PORT || 3001)

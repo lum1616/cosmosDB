@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const M16 = require('../models/M16')
+const N530 = require('../models/M16')
 const path = require("path")
 const PDFDocument = require('pdfkit')
 const fs =require('fs')
@@ -108,7 +108,7 @@ function genTotExcel(res, dts, str, end) {
      //}) 
   
      
-    let fName = "M16_Sum_" + dts[0].date  
+    let fName = "N530_Sum_" + dts[0].date  
     
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
      
@@ -158,7 +158,7 @@ function genDetailExcel(res, dts, str, end) {
     cnt++ 
    })
 
-  let fName = "M16_Detail_" + dts[0].date  
+  let fName = "N530_Detail_" + dts[0].date  
   res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
   res.setHeader('Content-disposition', 'attachment; filename='+ fName +'.xlsx');
   wb.xlsx.write(res)  
@@ -179,7 +179,7 @@ router.get('/', async (req, res) => {
   endDate = new Date(strDate).toISOString().substring(0,10)
  
   try {
-   query = M16.find( {
+   query = N530.find( {
     'date': {
       $gte: new Date(strDate + "T00:00:00.000+08:00").toISOString(),
       $lt: new Date(endDate + "T24:00:00.000+08:00").toISOString()
@@ -188,7 +188,7 @@ router.get('/', async (req, res) => {
 
 
     const datas = await query.exec() 
-    res.render('M16s/index', {
+    res.render('N530/index', {
       datas: datas,
       str: strDate,
       end: strDate,
@@ -211,14 +211,14 @@ router.post('/', async (req, res) => {
   
   try {
  
-    let query = M16.find( {
+    let query = N530.find( {
       'date': {
         $gte: new Date(strDate ).toISOString( "en-US", {timeZone: "Asia/Kuala_Lumpur"}),
         $lt: new Date(tomorrow).toISOString( "en-US", {timeZone: "Asia/Kuala_Lumpur"}),
       }
    } )
     const datas = await query.exec() 
-    res.render('M16s/index', {
+    res.render('N530/index', {
       datas: datas,
       str : strDate,
       end : endDate, 
@@ -233,12 +233,11 @@ router.post('/', async (req, res) => {
 
 // show data of total usage  
 router.get('/:date', async (req, res) => {
-
-    //let query = M16.find( { date: req.params.date})
+  
   let tomorrow = new Date(endDate) 
   tomorrow.setDate(tomorrow.getDate() + 1)
 
-  let query = M16.find( {
+  let query = N530.find( {
     'date': {
       $gte: new Date(strDate ).toISOString( "en-US", {timeZone: "Asia/Kuala_Lumpur"}),
       $lt: new Date(tomorrow).toISOString( "en-US", {timeZone: "Asia/Kuala_Lumpur"}),
@@ -248,7 +247,7 @@ router.get('/:date', async (req, res) => {
     try { 
       const datas = await query.exec()
 
-      res.render('M16s/showData', {
+      res.render('N530/showData', {
         dts: datas,
         strDate: strDate,
         endDate: endDate,        
@@ -267,11 +266,10 @@ router.get('/:date', async (req, res) => {
 
 // Print total usage
 router.get('/:date/exceltot', async (req, res) => {
-
-  //let query = M16.find({date: req.params.date}) 
+ 
   let tomorrow = new Date(endDate)
   tomorrow.setDate(tomorrow.getDate() + 1) 
-  let query = M16.find( {
+  let query = N530.find( {
     'date': {
        $gte: new Date(strDate ).toISOString( "en-US", {timeZone: "Asia/Kuala_Lumpur"}),
     $lt: new Date(tomorrow).toISOString( "en-US", {timeZone: "Asia/Kuala_Lumpur"}),
@@ -290,14 +288,13 @@ router.get('/:date/exceltot', async (req, res) => {
 
 
 // Print Detail every log 
-router.get('/:date/excelDetail', async (req, res) => {
-  
-  //let query = M16.find({date: req.params.date})
+router.get('/:date/excelDetail', async (req, res) => { 
+
    
   let tomorrow = new Date(endDate) 
   tomorrow.setDate(tomorrow.getDate() + 1)
  
-  let query = M16.find( {
+  let query = N530.find( {
     'date': {
       $gte: new Date(strDate ).toISOString( "en-US", {timeZone: "Asia/Kuala_Lumpur"}),
         $lt: new Date(tomorrow).toISOString( "en-US", {timeZone: "Asia/Kuala_Lumpur"}),

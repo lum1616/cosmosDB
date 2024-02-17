@@ -1,0 +1,66 @@
+<h2 class="page-header">N530 Data List :- <span style="color:burlywood"><%=str  %> to  <%= end %></span></h2> 
+<div class="form-row"> </div>
+
+
+<form action="/N530" method="POST">
+  <div class="form-row form-row-end btn-row">    
+    <input class="btn btn-primary"  value ="strDate" type="date" name="strDt" id="StrDt">
+    <input class="btn btn-primary"  value ="enddate" type="date" name="endDt" id="endDt">
+    <button class="btn btn-primary" name="search" type="submit"> Search </button> 
+    <br>
+  </div>
+</form>
+
+
+<div class="form-row"> 
+   <table>
+     <tr>
+       <th>No</th>
+       <th>Date</th>
+       <th>Time</th>
+       <th>Recipe Name</th>
+       <th>Batch No</th>
+       <th>Silo No</th>
+       <th>Material Name</th> 
+       <th>Target Weight</th> 
+       <th>Actual Weight</th> 
+       <th>Variants Weight</th> 
+     </tr>
+
+      <% let i=1 %>
+      <% let dt ="2000-01-01" %>    
+      <% if (datas.length > 0)  {%>
+       <% dt = datas[0].date %> 
+     
+           
+      <% } %>
+      
+      <% datas.forEach(d => { %>
+        <tr>
+          <% let iTm = parseInt(d.date.substring(11,13)) %> 
+      
+          <%  let sTm = iTm.toString() + d.date.substring(13,19)%>  
+
+
+          <td><a class="btn-primary " href="/N530/<%= d.date %>"><%= i %></a></td>    
+          <td><%= d.date.substring(0,10) %> </td> 
+          <td><%= sTm %> </td>             
+          <td><%= d.rcpName %> </td>
+          <td><%= d.batchNo %> </td>          
+          <td><%= d.siloNo %> </td>
+          <td><%= d.matName %> </td>
+          <td><%= d.targWt %> </td>
+          <td><%= d.actWt %> </td>
+          <td><%= d.diffWt %> </td>  
+        </tr>         
+        
+        <% i= i+1 %>            
+      <% }) %> 
+    </table>
+  </div>
+  
+  <form action="/N530/<%= dt %>?_method=PUT" method="POST">
+    <div class="form-row form-row-end btn-row">
+      <a class="btn btn-primary"  href="/N530/<%= dt %>/excelDetail">EXCEL</a>
+    </div>
+  </form>

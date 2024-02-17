@@ -4,12 +4,8 @@ const M16 = require('../models/M16')
 
 
 router.get('/', async (req, res) => {
-
- 
   
-  res.render('index');
-
-
+  res.render('index')
 
 })
 
